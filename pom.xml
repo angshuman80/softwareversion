@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.0.1</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.miradry</groupId>
+	<artifactId>softwareversion</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>softwareversion</name>
+	<description>Software version</description>
+	<properties>
+		<java.version>17</java.version>
+		<spring-boot-thin-layout.version>1.0.28.RELEASE</spring-boot-thin-layout.version>
+
+		<!-- Spring Boot start class! WARING: correct class must be set! -->
+		<start-class>com.miradry.softwareversion.SoftwareversionApplication</start-class>
+
+		<!-- AZURE FUNCTION CONFIG -->
+		<azure.functions.maven.plugin.version>1.22.0</azure.functions.maven.plugin.version>
+		<functionAppName>softwareversion</functionAppName>
+		<functionAppRegion>eastus2</functionAppRegion>
+		<functionResourceGroup>miradryazrg</functionResourceGroup>
+		<functionAppServicePlanName>softwareversionplanbdf3678441</functionAppServicePlanName>
+		<!--<functionAppServicePlanName>ASP-miradryazrg-a109</functionAppServicePlanName>-->
+		<functionPricingTier>EP1</functionPricingTier>
+	</properties>
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-function-adapter-azure</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jdbc -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<version>3.4.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>7.0.0.jre8</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.microsoft.azure/azure-storage -->
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>azure-storage</artifactId>
+			<version>8.6.6</version>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.9.2</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.microsoft.azure</groupId>
+				<artifactId>azure-functions-maven-plugin</artifactId>
+				<version>${azure.functions.maven.plugin.version}</version>
+
+				<configuration>
+					<appName>${functionAppName}</appName>
+					<resourceGroup>${functionResourceGroup}</resourceGroup>
+					<region>${functionAppRegion}</region>
+					<appServicePlanName>${functionAppServicePlanName}</appServicePlanName>
+					<pricingTier>${functionPricingTier}</pricingTier>
+
+					<hostJson>${project.basedir}/src/main/resources/host.json</hostJson>
+					<localSettingsJson>${project.basedir}/src/main/resources/local.settings.json</localSettingsJson>
+
+					<runtime>
+						<os>windows</os>
+						<javaVersion>17</javaVersion>
+					</runtime>
+
+					<appSettings>
+						<property>
+							<name>FUNCTIONS_EXTENSION_VERSION</name>
+							<value>~4</value>
+						</property>
+					</appSettings>
+				</configuration>
+				<executions>
+					<execution>
+						<id>package-functions</id>
+						<goals>
+							<goal>package</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework.boot.experimental</groupId>
+						<artifactId>spring-boot-thin-layout</artifactId>
+						<version>${spring-boot-thin-layout.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>
