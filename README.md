@@ -4,7 +4,8 @@ MiraDry Software version
 ## Before you deploy your application to Azure Function, let's first test it locally
 
 First you need to package your application into a Jar file:
-* Install maven - Downlaod binary and install - https://maven.apache.org/install.html
+* Install maven - Downlaod binary and install - https://maven.apache.org/install.html. Maven version 3.x
+* Install Java 17
 * From the current directory run following command
 
 ```
